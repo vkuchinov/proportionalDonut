@@ -2467,6 +2467,7 @@
     };
       
     var svg, g, proportional, keys;
+    var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 
     var dimensions = "" + 0 + " " + 0 + " " + parameters.width + " " + parameters.height;
 
@@ -2538,15 +2539,28 @@
                 d3.selectAll(".Entry_" + d_.id).attr("fill", d3.rgb(d_.color).darker(-0.75)).attr("text-decoration", "underline");
                 d3.selectAll(".guider").filter(".Entry_" + d_.id).attr("fill", "none").attr("stroke", d3.rgb(d_.color).darker(-0.75));
                 
+                div.transition()
+                .duration(200)
+                .style("opacity", 0.8);
+                div.html(setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + (d_.value / data_[id].checksum * 100).toFixed(2) + "%)")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px")
+                .style("border", "solid 2px " + d_.color);
+
+                
             })
             .on("mouseout", function(d_){
+                
+                div.transition()
+                .duration(500)
+                .style("opacity", 0);
                 
                 d3.selectAll(".Entry_" + d_.id).attr("fill", d_.color).attr("text-decoration", "none");
                 d3.selectAll(".guider").filter(".Entry_" + d_.id).attr("fill", "none").attr("stroke", d_.color);
                 
             })
-            .append("title")
-            .text(function(d_) { return setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + (d_.value / data_[id].checksum * 100).toFixed(2) + "%)"; })
+            //.append("title")
+            //.text(function(d_) { return setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + (d_.value / data_[id].checksum * 100).toFixed(2) + "%)"; })
     
             
             dots = d3.select(this).selectAll(".dot")
@@ -2594,7 +2608,6 @@
     
                 var textLength = getTextWidth(setAlias(d_.data.name), 8) + 24;
                 var line = Math.floor(i_ / parameters.legendWidth);
-                console.log(legendLineAlign[line]);
                 d_.width = textLength;
                 var transform = "translate(" + (legendLineAlign[line] + parameters.offset + legendOffset)  + ", " + (parameters.height * 0.88 + Math.floor(i_ / parameters.legendWidth) * 16) + ")";
                 legendOffset += textLength;
