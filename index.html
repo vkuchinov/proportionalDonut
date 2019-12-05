@@ -1,0 +1,2763 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Proporitonal Donut Chart With Side Highlight</title>
+    <script src="http://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="styles.css" charset="utf-8">
+      
+    <script src="d3.proportional.js"></script>
+  
+  </head>
+  <body>
+  
+  <div id="d3"></div>
+  <select id="portfolioSelector" class="custom-select" name="Portfolios" onchange="setNewProportionalDonut()"></select>
+      
+  <script>
+      
+    var portfolios = {
+        
+       "BNP Paribas Easy Low Carbon 100 Europe":{
+          "id":0,
+          "Left":{
+             "name":"BNP Paribas Easy Low Carbon 100 Europe_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Communications",
+                   "value":150909702321
+                },
+                {
+                   "name":"#N/A",
+                   "value":990416194436
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":490788523339
+                },
+                {
+                   "name":"Financials",
+                   "value":741747156393
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":232199907567
+                },
+                {
+                   "name":"Industrials",
+                   "value":228848255736.1
+                },
+                {
+                   "name":"Materials",
+                   "value":25255685046
+                },
+                {
+                   "name":"Technology",
+                   "value":33220015952
+                }
+             ]
+          },
+          "Right":{
+             "name":"BNP Paribas Easy Low Carbon 100 Europe_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Automotive",
+                   "value":96616063589
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":41213515784
+                },
+                {
+                   "name":"Aviation",
+                   "value":10938536263
+                },
+                {
+                   "name":"Other Materials",
+                   "value":126015516278
+                },
+                {
+                   "name":"Other Energy",
+                   "value":28838647093.2
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":24338873402
+                },
+                {
+                   "name":"Power",
+                   "value":11486363916
+                }
+             ]
+          }
+       },
+       "EURO STOXX 600":{
+          "id":1,
+          "Left":{
+             "name":"EURO STOXX 600_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Financials",
+                   "value":1701301878609
+                },
+                {
+                   "name":"Communications",
+                   "value":439536143205
+                },
+                {
+                   "name":"#N/A",
+                   "value":2089824924762
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":1250107032642
+                },
+                {
+                   "name":"Technology",
+                   "value":197818303102
+                },
+                {
+                   "name":"Industrials",
+                   "value":541609298359
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":576083538572
+                },
+                {
+                   "name":"Materials",
+                   "value":120132791279
+                }
+             ]
+          },
+          "Right":{
+             "name":"EURO STOXX 600_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Aviation",
+                   "value":43356694896
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":596693580479
+                },
+                {
+                   "name":"Power",
+                   "value":569583540449
+                },
+                {
+                   "name":"Coal",
+                   "value":197531777296
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":187805349323
+                },
+                {
+                   "name":"Other Materials",
+                   "value":356751424078
+                },
+                {
+                   "name":"Automotive",
+                   "value":252311656120
+                },
+                {
+                   "name":"Other Energy",
+                   "value":27998429993
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":54110319956
+                },
+                {
+                   "name":"Shipping",
+                   "value":3179586245
+                }
+             ]
+          }
+       },
+       "EURO STOXX Small Index":{
+          "id":2,
+          "Left":{
+             "name":"EURO STOXX Small Index_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Financials",
+                   "value":35921580856
+                },
+                {
+                   "name":"Technology",
+                   "value":6693288864
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":28947275288
+                },
+                {
+                   "name":"Industrials",
+                   "value":38748790555
+                },
+                {
+                   "name":"#N/A",
+                   "value":82637923505
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":16421359314
+                },
+                {
+                   "name":"Communications",
+                   "value":38022607169
+                },
+                {
+                   "name":"Materials",
+                   "value":8129532386
+                }
+             ]
+          },
+          "Right":{
+             "name":"EURO STOXX Small Index_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other #N/A",
+                   "value":10211228125
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":8289398000
+                },
+                {
+                   "name":"Other Materials",
+                   "value":6332102867
+                },
+                {
+                   "name":"Aviation",
+                   "value":2657087287
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":1775372624
+                },
+                {
+                   "name":"Shipping",
+                   "value":3179586245
+                },
+                {
+                   "name":"Power",
+                   "value":6476861561
+                },
+                {
+                   "name":"Other Energy",
+                   "value":3405043739
+                }
+             ]
+          }
+       },
+       "FSTE Emerging Markets":{
+          "id":3,
+          "Left":{
+             "name":"FSTE Emerging Markets_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Industrials",
+                   "value":178668420277.36008
+                },
+                {
+                   "name":"#N/A",
+                   "value":1294183542170.2998
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":321750396133.2999
+                },
+                {
+                   "name":"Financials",
+                   "value":1264244109511.1997
+                },
+                {
+                   "name":"Materials",
+                   "value":81807909987.4
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":91921719748.49998
+                },
+                {
+                   "name":"Communications",
+                   "value":413284728699.2
+                },
+                {
+                   "name":"Technology",
+                   "value":279904782878
+                },
+                {
+                   "name":"Health Care",
+                   "value":2503217226
+                }
+             ]
+          },
+          "Right":{
+             "name":"FSTE Emerging Markets_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":160560385187.4
+                },
+                {
+                   "name":"Coal",
+                   "value":45540446453.6
+                },
+                {
+                   "name":"Other Materials",
+                   "value":109069937414.2
+                },
+                {
+                   "name":"Automotive",
+                   "value":87476585354.3
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":148813082945.69998
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":418751735562.60004
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":29387664798.8
+                },
+                {
+                   "name":"Aviation",
+                   "value":19855762833.8
+                },
+                {
+                   "name":"Other Energy",
+                   "value":4637409937.7
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":11237609544
+                }
+             ]
+          }
+       },
+       "FTSE 100":{
+          "id":4,
+          "Left":{
+             "name":"FTSE 100_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Financials",
+                   "value":442905502303
+                },
+                {
+                   "name":"Communications",
+                   "value":128859342521
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":417641657265
+                },
+                {
+                   "name":"#N/A",
+                   "value":394041966825
+                },
+                {
+                   "name":"Industrials",
+                   "value":76240575310
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":219803160114
+                },
+                {
+                   "name":"Materials",
+                   "value":30698728334
+                }
+             ]
+          },
+          "Right":{
+             "name":"FTSE 100_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Aviation",
+                   "value":15822119997
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":356219635346
+                },
+                {
+                   "name":"Coal",
+                   "value":196358890433
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":8358740765
+                },
+                {
+                   "name":"Other Materials",
+                   "value":7919550555
+                },
+                {
+                   "name":"Power",
+                   "value":109412607499
+                },
+                {
+                   "name":"Other Energy",
+                   "value":8176318686
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":2049260705
+                }
+             ]
+          }
+       },
+       "FTSE 250":{
+          "id":5,
+          "Left":{
+             "name":"FTSE 250_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":170368997024.9847
+                },
+                {
+                   "name":"Industrials",
+                   "value":44429495660.31128
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":21706352147.914043
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":44363755582.14116
+                },
+                {
+                   "name":"Technology",
+                   "value":5076013183.704739
+                },
+                {
+                   "name":"Financials",
+                   "value":82112394158.73163
+                },
+                {
+                   "name":"Communications",
+                   "value":16373234011.887316
+                },
+                {
+                   "name":"Materials",
+                   "value":7408905490.793451
+                },
+                {
+                   "name":"Health Care",
+                   "value":171441.41143399998
+                }
+             ]
+          },
+          "Right":{
+             "name":"FTSE 250_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Oil&Gas",
+                   "value":9590155810.959911
+                },
+                {
+                   "name":"Power",
+                   "value":8785845062.686813
+                },
+                {
+                   "name":"Other Materials",
+                   "value":9392849426.680037
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":5834255476.725042
+                },
+                {
+                   "name":"Coal",
+                   "value":6944848399.213241
+                },
+                {
+                   "name":"Other Energy",
+                   "value":536565014.8
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":748119389.3978772
+                },
+                {
+                   "name":"Aviation",
+                   "value":2297614260.9823413
+                },
+                {
+                   "name":"Automotive",
+                   "value":129843.76929000001
+                }
+             ]
+          }
+       },
+       "Latin America":{
+          "id":6,
+          "Left":{
+             "name":"Latin America_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Materials",
+                   "value":7904640788
+                },
+                {
+                   "name":"Communications",
+                   "value":16757475317
+                },
+                {
+                   "name":"Financials",
+                   "value":136836239452
+                },
+                {
+                   "name":"#N/A",
+                   "value":34081565038
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":59172378166
+                },
+                {
+                   "name":"Industrials",
+                   "value":7462153428
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":14069291921
+                }
+             ]
+          },
+          "Right":{
+             "name":"Latin America_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":23519719821
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":75001687538
+                },
+                {
+                   "name":"Other Materials",
+                   "value":4096713817
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":88184390461
+                },
+                {
+                   "name":"Aviation",
+                   "value":3969510692
+                }
+             ]
+          }
+       },
+       "MSCI ACWI":{
+          "id":7,
+          "Left":{
+             "name":"MSCI ACWI_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":12450612476827.998
+                },
+                {
+                   "name":"Technology",
+                   "value":3134838689905.5
+                },
+                {
+                   "name":"Financials",
+                   "value":8234993610885.899
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":3906218221989
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":2000167423377.9
+                },
+                {
+                   "name":"Materials",
+                   "value":294518621449.4
+                },
+                {
+                   "name":"Communications",
+                   "value":3709801020635.5
+                },
+                {
+                   "name":"Industrials",
+                   "value":2022133447272.9
+                },
+                {
+                   "name":"Health Care",
+                   "value":385611527613
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI ACWI_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other Materials",
+                   "value":859222903080.6
+                },
+                {
+                   "name":"Power",
+                   "value":2406672848226.3
+                },
+                {
+                   "name":"Coal",
+                   "value":450252312213
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":2833378342534.7
+                },
+                {
+                   "name":"Aviation",
+                   "value":158419037357.5
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":666184286730.9
+                },
+                {
+                   "name":"Automotive",
+                   "value":858807855236
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":410368950698
+                },
+                {
+                   "name":"Other Energy",
+                   "value":31641914215.6
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":5513666944
+                },
+                {
+                   "name":"Shipping",
+                   "value":3179586245
+                }
+             ]
+          }
+       },
+       "MSCI ACWI Low Carbon":{
+          "id":8,
+          "Left":{
+             "name":"MSCI ACWI Low Carbon_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":11037445593104.602
+                },
+                {
+                   "name":"Technology",
+                   "value":2694346863800
+                },
+                {
+                   "name":"Financials",
+                   "value":7368950145246.9
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":1808544927651.9
+                },
+                {
+                   "name":"Materials",
+                   "value":82069414315
+                },
+                {
+                   "name":"Communications",
+                   "value":3506733153333
+                },
+                {
+                   "name":"Industrials",
+                   "value":1691449494312.3
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":3353698757247
+                },
+                {
+                   "name":"Health Care",
+                   "value":385611527613
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI ACWI Low Carbon_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":857855559837.2
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":1081869483491.7
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":482489219776
+                },
+                {
+                   "name":"Other Materials",
+                   "value":422909207699
+                },
+                {
+                   "name":"Automotive",
+                   "value":764918660917
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":195483101781.6
+                },
+                {
+                   "name":"Coal",
+                   "value":55622688171
+                },
+                {
+                   "name":"Other Energy",
+                   "value":29373592508
+                },
+                {
+                   "name":"Shipping",
+                   "value":3179586245
+                }
+             ]
+          }
+       },
+       "MSCI All Country Asia":{
+          "id":9,
+          "Left":{
+             "name":"MSCI All Country Asia_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Financials",
+                   "value":1570237129687.0996
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":335296349028.5
+                },
+                {
+                   "name":"Technology",
+                   "value":562411747892.4
+                },
+                {
+                   "name":"#N/A",
+                   "value":1348288034917.2002
+                },
+                {
+                   "name":"Industrials",
+                   "value":200277110480.90005
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":129433148271.90001
+                },
+                {
+                   "name":"Materials",
+                   "value":52451720532
+                },
+                {
+                   "name":"Communications",
+                   "value":296890225509.2
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI All Country Asia_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":205890974324.9
+                },
+                {
+                   "name":"Automotive",
+                   "value":113874536060
+                },
+                {
+                   "name":"Aviation",
+                   "value":15224208388.8
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":75224167958.8
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":236756102335.1
+                },
+                {
+                   "name":"Coal",
+                   "value":24146666958.6
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":40311026514.9
+                },
+                {
+                   "name":"Other Materials",
+                   "value":79458095030
+                },
+                {
+                   "name":"Other Energy",
+                   "value":7196065198.200001
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":5513666944
+                }
+             ]
+          }
+       },
+       "MSCI All Country Asia Ex JP":{
+          "id":10,
+          "Left":{
+             "name":"MSCI All Country Asia Ex JP_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Financials",
+                   "value":1619046902131.7996
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":347153357396.2
+                },
+                {
+                   "name":"Technology",
+                   "value":594651928768.5
+                },
+                {
+                   "name":"#N/A",
+                   "value":1475208897505.9
+                },
+                {
+                   "name":"Industrials",
+                   "value":237249160488.30005
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":134737868481.5
+                },
+                {
+                   "name":"Materials",
+                   "value":53650636076
+                },
+                {
+                   "name":"Communications",
+                   "value":313902308756.80005
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI All Country Asia Ex JP_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":226708927962.3
+                },
+                {
+                   "name":"Automotive",
+                   "value":128765352119
+                },
+                {
+                   "name":"Aviation",
+                   "value":21017838830.8
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":85505709756.40001
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":237982369314.1
+                },
+                {
+                   "name":"Coal",
+                   "value":46896229909.5
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":56378893972.9
+                },
+                {
+                   "name":"Other Materials",
+                   "value":87494003320
+                },
+                {
+                   "name":"Other Energy",
+                   "value":11074743258.2
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":7884730110
+                }
+             ]
+          }
+       },
+       "MSCI Emerging Markets":{
+          "id":11,
+          "Left":{
+             "name":"MSCI Emerging Markets_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":1456385366441.2998
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":439754259044.3
+                },
+                {
+                   "name":"Financials",
+                   "value":1696374970707.9993
+                },
+                {
+                   "name":"Industrials",
+                   "value":243618026549.70004
+                },
+                {
+                   "name":"Materials",
+                   "value":70625094857.4
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":152951950026
+                },
+                {
+                   "name":"Communications",
+                   "value":445196468046.80005
+                },
+                {
+                   "name":"Technology",
+                   "value":589055820598.5
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI Emerging Markets_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":247845222640.29996
+                },
+                {
+                   "name":"Coal",
+                   "value":66168387212.6
+                },
+                {
+                   "name":"Other Materials",
+                   "value":122803665030.6
+                },
+                {
+                   "name":"Automotive",
+                   "value":129718816819
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":189142597900
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":410657309796.7
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":53071857895.9
+                },
+                {
+                   "name":"Other Energy",
+                   "value":11074743258.2
+                },
+                {
+                   "name":"Aviation",
+                   "value":23232241880.8
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":11237609544
+                }
+             ]
+          }
+       },
+       "MSCI Emerging Markets Asia":{
+          "id":12,
+          "Left":{
+             "name":"MSCI Emerging Markets Asia_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":3962998360378.1997
+                },
+                {
+                   "name":"Financials",
+                   "value":3760858023274.801
+                },
+                {
+                   "name":"Industrials",
+                   "value":642185078298.5997
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":892188261447.2997
+                },
+                {
+                   "name":"Materials",
+                   "value":163008625406.4
+                },
+                {
+                   "name":"Communications",
+                   "value":808454979137.1
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":369746121627.89996
+                },
+                {
+                   "name":"Technology",
+                   "value":1749013437241.7996
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI Emerging Markets Asia_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":533868065661.9
+                },
+                {
+                   "name":"Automotive",
+                   "value":390486006669.30005
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":252401632807.5
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":631684037325.2999
+                },
+                {
+                   "name":"Coal",
+                   "value":127438362955.5
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":158493732271.5
+                },
+                {
+                   "name":"Other Materials",
+                   "value":262226383308
+                },
+                {
+                   "name":"Other Energy",
+                   "value":35395024071.899994
+                },
+                {
+                   "name":"Aviation",
+                   "value":51866087186.4
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":16541000832
+                }
+             ]
+          }
+       },
+       "MSCI Europe":{
+          "id":13,
+          "Left":{
+             "name":"MSCI Europe_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Financials",
+                   "value":2040840764271
+                },
+                {
+                   "name":"Communications",
+                   "value":539250121306
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":1645409063990
+                },
+                {
+                   "name":"#N/A",
+                   "value":2336693110850
+                },
+                {
+                   "name":"Industrials",
+                   "value":560588951205
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":746295213159
+                },
+                {
+                   "name":"Materials",
+                   "value":101891267068
+                },
+                {
+                   "name":"Technology",
+                   "value":208879281823
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI Europe_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Oil&Gas",
+                   "value":1026767492952
+                },
+                {
+                   "name":"Coal",
+                   "value":392717780866
+                },
+                {
+                   "name":"Other Materials",
+                   "value":266027276836
+                },
+                {
+                   "name":"Power",
+                   "value":673994435453
+                },
+                {
+                   "name":"Other Energy",
+                   "value":36174748679
+                },
+                {
+                   "name":"Aviation",
+                   "value":44720949396
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":164110054334
+                },
+                {
+                   "name":"Automotive",
+                   "value":267270707299
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":41802420903
+                },
+                {
+                   "name":"Shipping",
+                   "value":3179586245
+                }
+             ]
+          }
+       },
+       "MSCI Japan":{
+          "id":14,
+          "Left":{
+             "name":"MSCI Japan_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Technology",
+                   "value":339447466697
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":296354690630
+                },
+                {
+                   "name":"#N/A",
+                   "value":987014566611
+                },
+                {
+                   "name":"Materials",
+                   "value":14145036442
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":152818847850
+                },
+                {
+                   "name":"Financials",
+                   "value":411176834430
+                },
+                {
+                   "name":"Industrials",
+                   "value":107849562322
+                },
+                {
+                   "name":"Communications",
+                   "value":246555593770
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI Japan_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other #N/A",
+                   "value":179180458749
+                },
+                {
+                   "name":"Automotive",
+                   "value":336729240496
+                },
+                {
+                   "name":"Aviation",
+                   "value":22891891019
+                },
+                {
+                   "name":"Other Materials",
+                   "value":166791053484
+                },
+                {
+                   "name":"Power",
+                   "value":132759700224
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":65833433190
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":57829732285
+                }
+             ]
+          }
+       },
+       "MSCI Latin America":{
+          "id":15,
+          "Left":{
+             "name":"MSCI Latin America_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":63738314384
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":20874098432
+                },
+                {
+                   "name":"Materials",
+                   "value":15466222561.3
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":101876571409
+                },
+                {
+                   "name":"Communications",
+                   "value":26052169403
+                },
+                {
+                   "name":"Industrials",
+                   "value":20617394321
+                },
+                {
+                   "name":"Financials",
+                   "value":182936923870
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI Latin America_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Power",
+                   "value":41310584484
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":78533035677
+                },
+                {
+                   "name":"Other Materials",
+                   "value":9244722091
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":69595630688
+                },
+                {
+                   "name":"Coal",
+                   "value":2644751558
+                },
+                {
+                   "name":"Aviation",
+                   "value":4016396166
+                }
+             ]
+          }
+       },
+       "MSCI Pacific":{
+          "id":16,
+          "Left":{
+             "name":"MSCI Pacific_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Consumer Staples",
+                   "value":437676169310.2999
+                },
+                {
+                   "name":"Technology",
+                   "value":357003652974.9
+                },
+                {
+                   "name":"Financials",
+                   "value":1134383193397.9
+                },
+                {
+                   "name":"Communications",
+                   "value":320366935138.6
+                },
+                {
+                   "name":"Materials",
+                   "value":37692735763.4
+                },
+                {
+                   "name":"#N/A",
+                   "value":1327501500084.05
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":200151046245.79996
+                },
+                {
+                   "name":"Industrials",
+                   "value":180864606286.09998
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI Pacific_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Coal",
+                   "value":157739457789.4
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":191452170605.30002
+                },
+                {
+                   "name":"Automotive",
+                   "value":336729240496
+                },
+                {
+                   "name":"Power",
+                   "value":217794999841
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":130828543013
+                },
+                {
+                   "name":"Other Materials",
+                   "value":177388129300.4
+                },
+                {
+                   "name":"Aviation",
+                   "value":27678885146
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":76923639259.6
+                },
+                {
+                   "name":"Other Energy",
+                   "value":253027004.5
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":1266585524
+                }
+             ]
+          }
+       },
+       "MSCI UK":{
+          "id":17,
+          "Left":{
+             "name":"MSCI UK_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Industrials",
+                   "value":39654344341.2
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":58885241169.70001
+                },
+                {
+                   "name":"#N/A",
+                   "value":118693076093.99997
+                },
+                {
+                   "name":"Financials",
+                   "value":64783354493.2
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":34127828540.599995
+                },
+                {
+                   "name":"Technology",
+                   "value":5455193292.200001
+                },
+                {
+                   "name":"Materials",
+                   "value":13871347383.4
+                },
+                {
+                   "name":"Communications",
+                   "value":23217460912.7
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI UK_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Oil&Gas",
+                   "value":12861936515.4
+                },
+                {
+                   "name":"Power",
+                   "value":8338499580
+                },
+                {
+                   "name":"Aviation",
+                   "value":926647677.4
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":13706146186.7
+                },
+                {
+                   "name":"Other Materials",
+                   "value":9848424726.9
+                },
+                {
+                   "name":"Coal",
+                   "value":4530867607.900001
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":747996758.4
+                },
+                {
+                   "name":"Other Energy",
+                   "value":726969932.5
+                }
+             ]
+          }
+       },
+       "MSCI USA":{
+          "id":18,
+          "Left":{
+             "name":"MSCI USA_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":7707011748571
+                },
+                {
+                   "name":"Technology",
+                   "value":1917853993149
+                },
+                {
+                   "name":"Financials",
+                   "value":3577031662540
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":1818461413315
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":1179387567886
+                },
+                {
+                   "name":"Materials",
+                   "value":89929195833
+                },
+                {
+                   "name":"Communications",
+                   "value":2459089374891
+                },
+                {
+                   "name":"Industrials",
+                   "value":911921314177
+                },
+                {
+                   "name":"Health Care",
+                   "value":385611527613
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI USA_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other Materials",
+                   "value":273137981163
+                },
+                {
+                   "name":"Power",
+                   "value":1469912059495
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":1284847685722
+                },
+                {
+                   "name":"Aviation",
+                   "value":86410919087
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":275204069985
+                },
+                {
+                   "name":"Automotive",
+                   "value":138947643248
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":96494262542
+                },
+                {
+                   "name":"Coal",
+                   "value":18283565904
+                }
+             ]
+          }
+       },
+       "MSCI World":{
+          "id":19,
+          "Left":{
+             "name":"MSCI World_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":11106367954729
+                },
+                {
+                   "name":"Technology",
+                   "value":2483899800573
+                },
+                {
+                   "name":"Financials",
+                   "value":6790132602328
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":3552697285317
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":1911675868226
+                },
+                {
+                   "name":"Materials",
+                   "value":232038883367
+                },
+                {
+                   "name":"Communications",
+                   "value":3304193720261
+                },
+                {
+                   "name":"Industrials",
+                   "value":1835154540654
+                },
+                {
+                   "name":"Health Care",
+                   "value":385611527613
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI World_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other Materials",
+                   "value":756354839127
+                },
+                {
+                   "name":"Power",
+                   "value":2281826429528
+                },
+                {
+                   "name":"Coal",
+                   "value":407038475267
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":2378297428728
+                },
+                {
+                   "name":"Aviation",
+                   "value":153731560817
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":634658169422
+                },
+                {
+                   "name":"Automotive",
+                   "value":742947591043
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":242141505502
+                },
+                {
+                   "name":"Other Energy",
+                   "value":27998429993
+                },
+                {
+                   "name":"Shipping",
+                   "value":3179586245
+                }
+             ]
+          }
+       },
+       "MSCI World Small Cap":{
+          "id":20,
+          "Left":{
+             "name":"MSCI World Small Cap_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Industrials",
+                   "value":396977010346.2
+                },
+                {
+                   "name":"#N/A",
+                   "value":1612819759578.399
+                },
+                {
+                   "name":"Financials",
+                   "value":1018406714123.3003
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":421845006546.2999
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":248955634114.99994
+                },
+                {
+                   "name":"Materials",
+                   "value":112006756256.80002
+                },
+                {
+                   "name":"Communications",
+                   "value":205774068995.69995
+                },
+                {
+                   "name":"Technology",
+                   "value":258143743093.5
+                },
+                {
+                   "name":"Health Care",
+                   "value":14042415844.1
+                }
+             ]
+          },
+          "Right":{
+             "name":"MSCI World Small Cap_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Oil&Gas",
+                   "value":217875165964.99997
+                },
+                {
+                   "name":"Power",
+                   "value":119752591523.2
+                },
+                {
+                   "name":"Other Materials",
+                   "value":151354704415
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":63478563842.7
+                },
+                {
+                   "name":"Coal",
+                   "value":76642666487.14
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":167125520415.9
+                },
+                {
+                   "name":"Other Energy",
+                   "value":25520704215.399998
+                },
+                {
+                   "name":"Aviation",
+                   "value":16251490029
+                },
+                {
+                   "name":"Automotive",
+                   "value":1714109619.4
+                },
+                {
+                   "name":"Shipping",
+                   "value":683537509.7
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":3573959379.5
+                }
+             ]
+          }
+       },
+       "NIKKEI 225":{
+          "id":21,
+          "Left":{
+             "name":"NIKKEI 225_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Technology",
+                   "value":227710952501
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":230487136576
+                },
+                {
+                   "name":"#N/A",
+                   "value":671066651961.4
+                },
+                {
+                   "name":"Materials",
+                   "value":16292841699.9
+                },
+                {
+                   "name":"Financials",
+                   "value":355548683485
+                },
+                {
+                   "name":"Industrials",
+                   "value":97745601980.4
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":111098988616.1
+                },
+                {
+                   "name":"Communications",
+                   "value":233979534210.5
+                }
+             ]
+          },
+          "Right":{
+             "name":"NIKKEI 225_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other #N/A",
+                   "value":141098516331.3
+                },
+                {
+                   "name":"Automotive",
+                   "value":336729240496
+                },
+                {
+                   "name":"Aviation",
+                   "value":10969140653
+                },
+                {
+                   "name":"Other Materials",
+                   "value":154146851859
+                },
+                {
+                   "name":"Power",
+                   "value":84969939815
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":64513207866.9
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":49401521155
+                },
+                {
+                   "name":"Coal",
+                   "value":363572654
+                },
+                {
+                   "name":"Other Energy",
+                   "value":1621706083
+                }
+             ]
+          }
+       },
+       "Russell 1000":{
+          "id":22,
+          "Left":{
+             "name":"Russell 1000_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":8193412055357.5
+                },
+                {
+                   "name":"Technology",
+                   "value":2000438238327
+                },
+                {
+                   "name":"Financials",
+                   "value":3932304965762.0996
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":1861018155130.5
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":1287848408098.9
+                },
+                {
+                   "name":"Materials",
+                   "value":137864014706.3
+                },
+                {
+                   "name":"Communications",
+                   "value":2476151723565.1997
+                },
+                {
+                   "name":"Industrials",
+                   "value":1156676565521
+                },
+                {
+                   "name":"Health Care",
+                   "value":393022262075
+                }
+             ]
+          },
+          "Right":{
+             "name":"Russell 1000_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other Materials",
+                   "value":317159290479
+                },
+                {
+                   "name":"Aviation",
+                   "value":101590241187
+                },
+                {
+                   "name":"Power",
+                   "value":1487708765439
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":1386639471314.2998
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":291200378898.9
+                },
+                {
+                   "name":"Automotive",
+                   "value":138947643248
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":110800078002
+                },
+                {
+                   "name":"Coal",
+                   "value":23803053250
+                },
+                {
+                   "name":"Other Energy",
+                   "value":6733062470
+                }
+             ]
+          }
+       },
+       "Russell 2000":{
+          "id":23,
+          "Left":{
+             "name":"Russell 2000_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Industrials",
+                   "value":112347579301.09995
+                },
+                {
+                   "name":"#N/A",
+                   "value":623636378920.6498
+                },
+                {
+                   "name":"Financials",
+                   "value":433548767922.5898
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":178311878714.19998
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":54642520227.84
+                },
+                {
+                   "name":"Communications",
+                   "value":78315600171.10997
+                },
+                {
+                   "name":"Technology",
+                   "value":115630564357.85002
+                },
+                {
+                   "name":"Materials",
+                   "value":19687036827
+                },
+                {
+                   "name":"Health Care",
+                   "value":6631681382.1
+                }
+             ]
+          },
+          "Right":{
+             "name":"Russell 2000_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Oil&Gas",
+                   "value":78003294404.29999
+                },
+                {
+                   "name":"Power",
+                   "value":50638239483.39999
+                },
+                {
+                   "name":"Other Materials",
+                   "value":39133683621.49
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":18901655503.8
+                },
+                {
+                   "name":"Coal",
+                   "value":12355375179.39
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":39868488702.97
+                },
+                {
+                   "name":"Other Energy",
+                   "value":11085609982.05
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":1989240803.26
+                },
+                {
+                   "name":"Aviation",
+                   "value":8997709769
+                },
+                {
+                   "name":"Shipping",
+                   "value":683537509.7
+                },
+                {
+                   "name":"Automotive",
+                   "value":1105364349.1
+                }
+             ]
+          }
+       },
+       "Russell 3000":{
+          "id":24,
+          "Left":{
+             "name":"Russell 3000_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Industrials",
+                   "value":1268877064690.8992
+                },
+                {
+                   "name":"#N/A",
+                   "value":8815476841854.143
+                },
+                {
+                   "name":"Technology",
+                   "value":2115927957855.4502
+                },
+                {
+                   "name":"Financials",
+                   "value":4364927626592.489
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":1465869577336.5002
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":1915660675358.3394
+                },
+                {
+                   "name":"Materials",
+                   "value":157551051533.30002
+                },
+                {
+                   "name":"Communications",
+                   "value":2554128139968.3
+                },
+                {
+                   "name":"Health Care",
+                   "value":399653943457.1
+                }
+             ]
+          },
+          "Right":{
+             "name":"Russell 3000_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other Materials",
+                   "value":356226780976.5801
+                },
+                {
+                   "name":"Aviation",
+                   "value":110587950956
+                },
+                {
+                   "name":"Power",
+                   "value":1538347004922.4001
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":1464567113951.1895
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":129701733505.80002
+                },
+                {
+                   "name":"Coal",
+                   "value":36117885636.74
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":330973273291.2
+                },
+                {
+                   "name":"Automotive",
+                   "value":140053007597.1
+                },
+                {
+                   "name":"Other Energy",
+                   "value":17803514848.5
+                },
+                {
+                   "name":"Other Utilities",
+                   "value":1989240803.26
+                },
+                {
+                   "name":"Shipping",
+                   "value":683537509.7
+                }
+             ]
+          }
+       },
+       "S and P 500":{
+          "id":25,
+          "Left":{
+             "name":"S and P 500_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"#N/A",
+                   "value":7291784632116
+                },
+                {
+                   "name":"Technology",
+                   "value":1889764622771
+                },
+                {
+                   "name":"Financials",
+                   "value":3384599689200
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":1804203853413
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":1074690354454
+                },
+                {
+                   "name":"Materials",
+                   "value":79128248790
+                },
+                {
+                   "name":"Communications",
+                   "value":2324721466008
+                },
+                {
+                   "name":"Industrials",
+                   "value":1043152554658
+                },
+                {
+                   "name":"Health Care",
+                   "value":385611527613
+                }
+             ]
+          },
+          "Right":{
+             "name":"S and P 500_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other Materials",
+                   "value":259521506200
+                },
+                {
+                   "name":"Aviation",
+                   "value":93847410637
+                },
+                {
+                   "name":"Power",
+                   "value":1460268081780
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":1274086550182
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":260266807628
+                },
+                {
+                   "name":"Automotive",
+                   "value":95829383855
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":75973842150
+                },
+                {
+                   "name":"Coal",
+                   "value":18283565904
+                }
+             ]
+          }
+       },
+       "S and P US Small Cap":{
+          "id":26,
+          "Left":{
+             "name":"S and P US Small Cap_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Industrials",
+                   "value":51298451254.50001
+                },
+                {
+                   "name":"#N/A",
+                   "value":185076501752.25995
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":75183548951.2
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":23791605355.2
+                },
+                {
+                   "name":"Financials",
+                   "value":161534489576.28
+                },
+                {
+                   "name":"Communications",
+                   "value":20460513216.699997
+                },
+                {
+                   "name":"Technology",
+                   "value":52191220979.159996
+                },
+                {
+                   "name":"Materials",
+                   "value":11372325869.4
+                },
+                {
+                   "name":"Health Care",
+                   "value":3063506728.1
+                }
+             ]
+          },
+          "Right":{
+             "name":"S and P US Small Cap_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Oil&Gas",
+                   "value":31186307974.74
+                },
+                {
+                   "name":"Other Materials",
+                   "value":21995987381.9
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":20588283633.8
+                },
+                {
+                   "name":"Power",
+                   "value":12811158594.8
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":5487993647.8
+                },
+                {
+                   "name":"Aviation",
+                   "value":5128393568
+                },
+                {
+                   "name":"Shipping",
+                   "value":683537509.7
+                },
+                {
+                   "name":"Other Energy",
+                   "value":2121729136.8999999
+                },
+                {
+                   "name":"Coal",
+                   "value":2270249604.34
+                }
+             ]
+          }
+       },
+       "STOXX 50":{
+          "id":27,
+          "Left":{
+             "name":"STOXX 50_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Financials",
+                   "value":490676667557
+                },
+                {
+                   "name":"#N/A",
+                   "value":461561467479
+                },
+                {
+                   "name":"Communications",
+                   "value":132498890615
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":303114001629
+                },
+                {
+                   "name":"Materials",
+                   "value":24832529754
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":177923492939
+                },
+                {
+                   "name":"Industrials",
+                   "value":206345773212
+                },
+                {
+                   "name":"Technology",
+                   "value":112170859400
+                }
+             ]
+          },
+          "Right":{
+             "name":"STOXX 50_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Oil&Gas",
+                   "value":189409534103
+                },
+                {
+                   "name":"Other Materials",
+                   "value":210825534410
+                },
+                {
+                   "name":"Other #N/A",
+                   "value":41213515784
+                },
+                {
+                   "name":"Automotive",
+                   "value":135334242757
+                },
+                {
+                   "name":"Power",
+                   "value":254672786477
+                }
+             ]
+          }
+       },
+       "TOPIX":{
+          "id":28,
+          "Left":{
+             "name":"TOPIX_Left",
+             "theta":1.5707963267948966,
+             "segments":[
+                {
+                   "name":"Technology",
+                   "value":385272837674.44
+                },
+                {
+                   "name":"#N/A",
+                   "value":1204383159227.6301
+                },
+                {
+                   "name":"Financials",
+                   "value":474213531581.5901
+                },
+                {
+                   "name":"Materials",
+                   "value":23823003991.739998
+                },
+                {
+                   "name":"Industrials",
+                   "value":190885416528.08994
+                },
+                {
+                   "name":"Consumer Staples",
+                   "value":367929517783.7202
+                },
+                {
+                   "name":"Communications",
+                   "value":268420528814.7199
+                },
+                {
+                   "name":"Consumer Discretionary",
+                   "value":223238600980.7802
+                }
+             ]
+          },
+          "Right":{
+             "name":"TOPIX_Right",
+             "theta":0,
+             "segments":[
+                {
+                   "name":"Other #N/A",
+                   "value":223260134105.37607
+                },
+                {
+                   "name":"Automotive",
+                   "value":337644194725.4
+                },
+                {
+                   "name":"Cement&Steel",
+                   "value":79984229354.19002
+                },
+                {
+                   "name":"Aviation",
+                   "value":22891891019
+                },
+                {
+                   "name":"Other Materials",
+                   "value":212843254615.0001
+                },
+                {
+                   "name":"Other Energy",
+                   "value":2707375829.85
+                },
+                {
+                   "name":"Power",
+                   "value":124994989742.00003
+                },
+                {
+                   "name":"Oil&Gas",
+                   "value":65810372215.68999
+                },
+                {
+                   "name":"Coal",
+                   "value":946833176.99
+                }
+             ]
+          }
+       }
+    };
+      
+    var parameters = {
+        
+        width: 1024, 
+        height: 384,
+        offset: 32,
+        units: "USD",
+        format: d3.format(",.2f"), 
+        startAngle:  Math.PI / 2.0 * 1.5,
+        endAngle: 2.0 * Math.PI + Math.PI / 2.0 * 1.5,
+        colors: d3.scaleOrdinal(d3.schemeCategory10),
+        aliases: [ { name: "#N/A", alias: "Other" }, { name: "Other #N/A", alias: "Other" } ],
+        legendWidth: 8
+        
+    };
+      
+    var svg, g, proportional, keys;
+
+    var dimensions = "" + 0 + " " + 0 + " " + parameters.width + " " + parameters.height;
+
+    var svg = d3.select("body").append("svg")
+            .attr("id", "svg", true)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", dimensions)
+            .classed("svg-content", true);
+      
+    setupPortfolioSelector();
+    setupProportionalDonut(portfolios[Object.keys(portfolios)[0]]);
+    
+    function setupPortfolioSelector(){
+        
+        keys = Object.keys(portfolios);
+        
+        keys.forEach(function(d_, i_){
+            
+            var option = document.createElement("option");
+            option.value = i_;
+            option.innerHTML = d_;
+            document.getElementById("portfolioSelector").appendChild(option);
+            
+        });
+        
+        document.getElementById("portfolioSelector").style.left = parameters.offset + "px";
+        document.getElementById("portfolioSelector").style.top = parameters.height * 0.45 + "px";
+        
+ 
+    }
+      
+    function setupProportionalDonut(index_){
+            
+        drawDonut(portfolios[keys[0]]);
+        
+    }
+      
+    function drawDonut(data_){
+        
+        proportional = d3.proportional()
+            .size([parameters.width, parameters.height * 0.7])
+            .leftOffset(0.45)
+            .rightOffset(0.65)
+            .colors(parameters.colors)
+            .startAngle(parameters.startAngle)
+            .endAngle(parameters.endAngle)
+            .labelOffset(1.1)
+            .left(data_.Left)
+            .right(data_.Right)
+            .setup();
+
+        var path, dots, label, guider;
+        var left = svg.append("g").attr("transform", "translate(" + data_.Left.dx + "," + (parameters.offset + data_.Left.dy) + ")").attr("class", "donut").attr("id", "Left");
+        var right = svg.append("g").attr("transform", "translate(" + data_.Right.dx + "," + (parameters.offset + data_.Right.dy) + ")").attr("class", "donut").attr("id", "Right");
+        
+        d3.selectAll(".donut").each(function(d_, i_){
+            
+            var id = d3.select(this).attr("id");
+            
+            path = d3.select(this).selectAll(".segment")
+            .data(data_[id].donut.segments)
+            .enter()
+            .append("path")
+            .attr("class", function(d_){ return "segment " + "Entry_" + d_.id; })
+            .attr("d", data_[id].arc )
+            .attr("fill", function(d_, i_){ return d_.color; })
+            .on("mouseover", function(d_){
+                
+                d3.selectAll(".Entry_" + d_.id).attr("fill", d3.rgb(d_.color).darker(-0.75)).attr("text-decoration", "underline");
+                d3.selectAll(".guider").filter(".Entry_" + d_.id).attr("fill", "none").attr("stroke", d3.rgb(d_.color).darker(-0.75));
+                
+            })
+            .on("mouseout", function(d_){
+                
+                d3.selectAll(".Entry_" + d_.id).attr("fill", d_.color).attr("text-decoration", "none");
+                d3.selectAll(".guider").filter(".Entry_" + d_.id).attr("fill", "none").attr("stroke", d_.color);
+                
+            })
+            .append("title")
+            .text(function(d_) { return setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + (d_.value / data_[id].checksum * 100).toFixed(2) + "%)"; })
+    
+            
+            dots = d3.select(this).selectAll(".dot")
+            .data(data_[id].donut.dots)
+            .enter()
+            .append("circle")
+            .attr("class", function(d_){ return "dot " + "Entry_" + d_.parent; })
+            .attr("cx", function(d_){ return d_.cx; })
+            .attr("cy", function(d_){ return d_.cy; })
+            .attr("r", function(d_){ return d_.r; })
+            .attr("fill", function(d_){ return d_.color; });
+            
+            label = d3.select(this).selectAll(".label")
+            .data(data_[id].donut.labels)
+            .enter()
+            .append("text")
+            .attr("class", function(d_){ return "label " + "Entry_" + d_.parent; })
+            .attr("x", function(d_){ return d_.dx; })
+            .attr("y", function(d_){ return d_.dy; })
+            .attr("text-anchor", function(d_){ return d_.align; })
+            .attr("fill", function(d_){ return d_.color; })
+            .text(function(d_){ return setAlias(d_.name); });  
+            
+            guider = d3.select(this).selectAll(".guider")
+            .data(data_[id].donut.guiders)
+            .enter()
+            .append("path")
+            .attr("class", function(d_){ return "guider " + "Entry_" + d_.parent; })
+            .attr("d", function(d_){ return d_.path; })
+            .attr("stroke", function(d_){ return d_.color; })
+            .attr("fill", "none")
+            
+        });
+        
+        var mergedData = data_["Left"].donut.segments.concat(data_["Right"].donut.segments);
+        var legendLineAlign = centerLegend(mergedData);
+        
+        var legendOffset = 0;
+        var legend = svg.selectAll("legend")
+            .data(mergedData)
+            .enter()
+            .append("g")
+            .attr("class", function(d_){ return "legend " + "Legend_" + d_.id; })
+            .attr("transform", function(d_, i_){ 
+    
+                var textLength = getTextWidth(setAlias(d_.data.name), 8) + 24;
+                var line = Math.floor(i_ / parameters.legendWidth);
+                console.log(legendLineAlign[line]);
+                d_.width = textLength;
+                var transform = "translate(" + (legendLineAlign[line] + parameters.offset + legendOffset)  + ", " + (parameters.height * 0.88 + Math.floor(i_ / parameters.legendWidth) * 16) + ")";
+                legendOffset += textLength;
+                if((i_ + 1) % (parameters.legendWidth) == 0) { legendOffset = 0; }
+                return transform; 
+            
+            });
+
+        legend.append("rect").attr("width", 10).attr("height", 10).attr("fill", function(d_){ return d_.color; })
+        legend.append("text").attr("x", 16).attr("y", 8).attr("font-size", 8).text(function(d_){ return setAlias(d_.data.name); })
+        legend.append("rect").attr("width", function(d_){ return d_.width; }).attr("height", 10).attr("fill", "#FFFFFF").attr("opacity", 0.0)
+        .on("mouseover", function(d_){ 
+            
+            d3.selectAll(".legend,.segment,.dot,.label,.guider").filter(function(k_){ if(k_.id == d_.id || k_.parent == d_.id) {return false; } return true; }).attr("opacity", 0.25);
+            d3.select(this.parentNode).attr("opacity", 1.0).attr("text-decoration", "underline");
+        
+        })
+        .on("mouseout", function(d_){ 
+            
+            d3.selectAll(".legend,.segment,.dot,.label,.guider").attr("opacity", 1.0).attr("text-decoration", "none");
+        
+        })
+        
+        //saveSvg("Portfolio_" + data_.id + ".svg");
+
+    }
+      
+    function buildPortfolios(csv_){
+                    
+        parameters.units = getUnits(d3.keys(csv_[0]), "Value");
+        
+        csv_.forEach(function(d_){
+
+            if(!portfolioExists(d_.Name)){
+                
+                portfolios[d_.Name] = {};
+                var portfolio = portfolios[d_.Name];
+                portfolio.id = Object.keys(portfolios).length - 1;
+                portfolio.Left = { name: d_.Name + "_Left" , theta: parameters.leftThera, segments: [] };
+                portfolio.Right = { name: d_.Name + "_Right", theta: parameters.rightTheta, segments: [] };
+                
+                portfolio[d_.Side].segments.push({ name: splitOthers(d_, d_[d_.Side]), value: Number(d_["Value_" + parameters.units]) });
+                
+                var option = document.createElement("option");
+                option.value = portfolio.id;
+                option.innerHTML = d_.Name;
+                document.getElementById("portfolioSelector").appendChild(option);
+ 
+            }
+            else{
+                
+                if(!segmentExists(portfolios[d_.Name][d_.Side].segments, splitOthers(d_, d_[d_.Side]))){
+                
+                    portfolios[d_.Name][d_.Side].segments.push({ name: splitOthers(d_, d_[d_.Side]), value: Number(d_["Value_" + parameters.units]) })
+                    
+                }
+                else{
+                    
+                    findParentBySide(portfolios[d_.Name][d_.Side].segments,  splitOthers(d_, d_[d_.Side])).value += Number(d_["Value_" + parameters.units]);
+                    
+                }
+                
+            }
+            
+        })
+
+        setupProportionalDonut(portfolios[Object.keys(portfolios)[0]]);
+
+    }
+      
+    function setNewProportionalDonut(){
+        
+        d3.select("svg").selectAll("*").remove();
+        drawDonut(portfolios[keys[document.getElementById("portfolioSelector").value]]);
+        
+    }
+      
+    function splitOthers(parent_, segment_){
+        
+        var out = segment_;
+        
+        if(parent_.Side != "Left" && segment_ == "Other") { 
+            
+            out = segment_ + " " + parent_.Left ;
+        
+        }
+        
+        return out;
+        
+    }
+      
+    function setAlias(name_){
+        
+        var out = name_;
+        parameters.aliases.forEach(function(d_){ if(d_.name == name_){ out = d_.alias; } })
+        return out;
+        
+    }
+      
+    function centerLegend(data_){
+        
+        var lens = [];
+        lens.push(0);
+        
+        data_.forEach(function(d_, i_){
+            
+            lens[lens.length - 1] += getTextWidth(setAlias(d_.data.name), 8) + 24;
+            if((i_ + 1) % (parameters.legendWidth) == 0) { lens.push(0); }
+            
+        })
+        
+        var out = [];
+        lens.forEach(function(d_){  out.push((parameters.width - parameters.offset - d_) / 2. - parameters.offset); })
+        
+        return out;
+        
+    }
+      
+    function getTextWidth(text_, size_){
+    
+        var width = 0;
+        
+        svg.append("g")
+        .selectAll(".dummyText")
+        .data([text_])
+        .enter()
+        .append("text")
+        .attr("class", "dummyText")
+        .attr("font-size", 8)
+        .text(function(d_) { return d_})
+        .attr("dy", size_)
+        .each(function(d_, i_) {
+
+            width = this.getBoundingClientRect().width;
+            this.remove();
+
+        });
+
+        return width;
+    
+    }
+      
+    function saveSvg(fileName_) {
+        
+        var svgData = document.getElementById("svg").outerHTML;
+        var preface = "";
+        var svgBlob = new Blob([preface, svgData], {type: "image/svg+xml;charset=utf-8" });
+        var svgUrl = URL.createObjectURL(svgBlob);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = svgUrl;
+        downloadLink.download = fileName_;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+    }
+      
+    function portfolioExists(name_) { return name_ in portfolios; }
+    function segmentExists(segments_, name_) { var out = false; segments_.forEach(function(d_){ if(d_.name == name_){ out = true; } }); return out; }
+    function findParentBySide(segments_, name_) { var out = null; segments_.forEach(function(d_){ if(d_.name == name_){ out = d_; } }); return out; }
+    function getUnits(keys_, mask_) { var out = ""; keys_.forEach(function(d_){ if(d_.includes(mask_)) { out = d_.split("_")[1]; } }); return out; }
+      
+  </script>
+      
+  </body>
+</html>
