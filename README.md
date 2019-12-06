@@ -16,5 +16,7 @@ based on D3.JS framework
     Uncomment line #2621 <i>saveSvg("Portfolio_" + data_.id + ".svg");</i><br>
 Additional requests:<br>
 [x] 0.00% format
+[x] greyscale palette for left side<br>
+[x] large left segments have naming at its center with auto abbreviation if name contains more than one word.
 
 <br>[-] planned, [x] done, [!] see comments<br>
