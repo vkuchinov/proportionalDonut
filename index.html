@@ -2492,7 +2492,7 @@
         if (error_) throw error_;
         cloudIcon = d3.select(svg_.documentElement.querySelector("g")).attr("transform", "scale(0.8)translate(-25, 12)").node();
         setupPortfolioSelector();
-        setupProportionalDonut(portfolios[Object.keys(portfolios)[0]]);
+        setNewProportionalDonut()
         
         
     }); 
@@ -2514,12 +2514,6 @@
         document.getElementById("portfolioSelector").style.top = parameters.height * 0.45 + "px";
         
  
-    }
-      
-    function setupProportionalDonut(index_){
-            
-        drawDonut(portfolios[keys[0]], keys[0]);
-        
     }
       
     function drawDonut(data_, title_){
@@ -2729,7 +2723,8 @@
     function setNewProportionalDonut(){
         
         d3.select("svg").selectAll("*").remove();
-        drawDonut(portfolios[keys[document.getElementById("portfolioSelector").value]], keys[document.getElementById("portfolioSelector").value]);
+        var data =  JSON.parse(JSON.stringify(portfolios[keys[document.getElementById("portfolioSelector").value]]));
+        drawDonut(data, keys[document.getElementById("portfolioSelector").value]);
         
     }
       
