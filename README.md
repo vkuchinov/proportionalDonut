@@ -1,6 +1,10 @@
 # proportionalDonut
 based on D3.JS framework
 
+
+![alt tag](https://raw.githubusercontent.com/vkuchinov/proportionalDonut/master/assets/sample.png)
+
+
 <h2>TODO LIST</H2>
 
 [x] Parse CSV data set to JSON format<br>
@@ -14,5 +18,3 @@ Additional requests:<br>
 [x] 0.00% format
 
 <br>[-] planned, [x] done, [!] see comments<br>
-
-![alt tag](https://raw.githubusercontent.com/vkuchinov/proportionalDonut/master/assets/sample.png)
