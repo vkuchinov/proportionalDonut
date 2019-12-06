@@ -2461,6 +2461,7 @@
         units: "USD",
         titlePosition: {cx: 0.5, cy: 0.33 },
         format: d3.format(",.2f"), 
+        format2: d3.format(".2n"), //sagnificant figures
         startAngle:  Math.PI / 2.0 * 1.5,
         endAngle: 2.0 * Math.PI + Math.PI / 2.0 * 1.5,
         grayscale: d3.scaleSequential(d3.interpolateGreys).domain([0.0, 1.0]),
@@ -2558,7 +2559,7 @@
                 div.transition()
                 .duration(200)
                 .style("opacity", 0.8);
-                div.html(setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + parameters.format(d_.value / data_[id].checksum * 100) + "%)")
+                div.html(setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + parameters.format2(d_.value / data_[id].checksum * 100) + "%)")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px")
                 .style("border", "solid 2px " + d_.color);
