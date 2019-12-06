@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <title>Proporitonal Donut Chart With Side Highlight</title>
     <script src="http://d3js.org/d3.v4.min.js"></script>
+    <script src="//d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
     <link rel="stylesheet" href="styles.css" charset="utf-8">
       
     <script src="d3.proportional.js"></script>
+    
   
   </head>
   <body>
@@ -2461,6 +2463,7 @@
         format: d3.format(",.2f"), 
         startAngle:  Math.PI / 2.0 * 1.5,
         endAngle: 2.0 * Math.PI + Math.PI / 2.0 * 1.5,
+        grayscale: d3.scaleSequential(d3.interpolateGreys).domain([0.0, 1.0]),
         colors: d3.scaleOrdinal(d3.schemeCategory10),
         aliases: [ { name: "#N/A", alias: "Other" }, { name: "Other #N/A", alias: "Other" } ],
         legendPositionY: 0.7,
@@ -2527,7 +2530,8 @@
             .size([parameters.width, parameters.height * 0.65])
             .leftOffset(0.35)
             .rightOffset(0.60)
-            .colors(parameters.colors)
+            .colorsLeft(parameters.grayscale)
+            .colorsRight(parameters.colors)
             .startAngle(parameters.startAngle)
             .endAngle(parameters.endAngle)
             .labelOffset(1.1)
@@ -2748,6 +2752,12 @@
         var out = name_;
         parameters.aliases.forEach(function(d_){ if(d_.name == name_){ out = d_.alias; } })
         return out;
+        
+    }
+      
+    function makeAbbreviation(name_){
+      
+        return name_.replace( /[^A-Z&]/g, '' );
         
     }
       

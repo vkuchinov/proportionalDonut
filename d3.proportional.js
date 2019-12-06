@@ -26,7 +26,8 @@ d3.proportional = function(){
     endAngle = 2 * Math.PI + Math.PI / 2 * 1.5,
     pie = d3.pie().padAngle(0).startAngle(startAngle).endAngle(endAngle).value(function(d_) { return d_.value; }).sort(null),
     arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius),
-    colors = d3.scaleOrdinal(d3.schemeCategory20),
+    colorsLeft = d3.scaleSequential(d3.interpolateGreys).domain([0.0, 1.0]),
+    colorsRight = d3.scaleOrdinal(d3.schemeCategory20),
     left = {}
     right = {};
     
@@ -39,11 +40,19 @@ d3.proportional = function(){
         return proportional;
 
     };
+    
+    proportional.colorsLeft = function (_) {
 
-    proportional.colors = function (_) {
+        if (!arguments.length) return colorsLeft;
+        colorsLeft = _;
+        return proportional;
 
-        if (!arguments.length) return colors;
-        colors = _;
+    };
+    
+    proportional.colorsRight = function (_) {
+
+        if (!arguments.length) return colorsRight;
+        colorsRight = _;
         return proportional;
 
     };
@@ -185,12 +194,15 @@ d3.proportional = function(){
         left.donut.segments.forEach(function(d_, i_){ 
         
             d_.id = i_;
-            d_.color = colors(d_.id); 
+            d_.color = colorsLeft(0.3 + 0.5 - 0.5 / left.donut.segments.length * i_);
             
                 var dx = 0, dy = 0, direction = -1, align = "start", path;
 
                 var median = d_.startAngle + (d_.endAngle - d_.startAngle) / 2.0;
+                d_.data.theta = Math.abs(d_.endAngle - d_.startAngle);
             
+                if(d_.data.theta < 0.5){
+                    
                 //bottom right
                 if(median < Math.PI){
 
@@ -278,6 +290,59 @@ d3.proportional = function(){
                     color: d_.color
                     
                 });
+                    
+                }
+                else{
+                    
+                    var dr = innerRadius + (outerRadius - innerRadius) / 2;
+                    dy = dr * Math.sin(-Math.PI / 2.0 + median);
+                    dx = dr * Math.cos(-Math.PI / 2.0 + median);
+                    align = "middle";
+
+                    d_.data.dx = dx;
+
+                    path = "";
+
+                    left.donut.dots.push({
+
+                        parent: d_.id,
+                        cx: 0,
+                        cy: 0,
+                        r: 0,
+                        color: d_.color
+
+                    });
+
+                    left.donut.dots.push({
+
+                        parent: d_.id,
+                        cx: 0,
+                        cy: 0,
+                        r: 0,
+                        color: d_.color
+
+                    });
+
+                    left.donut.labels.push({
+
+                        parent: null,
+                        name: d_.data.name.split(" ").length > 1 ? makeAbbreviation(d_.data.name) : d_.data.name,
+                        align: align,
+                        dx: dx,
+                        dy: dy,
+                        color: "#FFFFFF"
+
+                    });
+
+                    left.donut.guiders.push({
+
+                        parent: d_.id,
+                        path: path,
+                        color: d_.color
+
+                    });
+                    
+                }
 
         });
 
@@ -296,7 +361,7 @@ d3.proportional = function(){
         right.donut.segments.forEach(function(d_, i_){ 
             
             d_.id = left.donut.segments.length + i_;
-            d_.color = colors(d_.id); 
+            d_.color = colorsRight(d_.id - left.donut.segments.length); 
             
             var dx = 0, dy = 0, direction = 1, align = "start", path, half;
           
