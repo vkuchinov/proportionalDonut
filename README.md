@@ -4,7 +4,9 @@ based on D3.JS framework
 <h2>TODO LIST</H2>
 
 [x] Parse CSV data set to JSON format<br>
-[x] Legend with name & value
+[x] Legend with name & value<br>
+Additional requests:<br>
+[x] 0.00% format
 
 <br>[-] planned, [x] done, [!] see comments<br>
 
