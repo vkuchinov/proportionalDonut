@@ -56,6 +56,14 @@ d3.proportional = function(){
 
     };
     
+    proportional.outerRadius = function (_) {
+
+        if (!arguments.length) return outerRadius;
+        outerRadius = _;
+        return proportional;
+
+    };
+    
     proportional.leftOffset = function (_) {
 
         if (!arguments.length) return leftOffset ;
@@ -76,14 +84,6 @@ d3.proportional = function(){
 
         if (!arguments.length) return padding;
         padding = _;
-        return proportional;
-
-    };
-
-    proportional.outerRadius = function (_) {
-
-        if (!arguments.length) return outerRadius;
-        outerRadius = _;
         return proportional;
 
     };

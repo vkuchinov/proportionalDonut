@@ -10,7 +10,7 @@
   
   </head>
   <body>
-  
+      
   <div id="d3"></div>
   <select id="portfolioSelector" class="custom-select" name="Portfolios" onchange="setNewProportionalDonut()"></select>
       
@@ -2454,19 +2454,26 @@
     var parameters = {
         
         width: 1024, 
-        height: 384,
+        height: 724,
         offset: 32,
         units: "USD",
+        titlePosition: {cx: 0.5, cy: 0.33 },
         format: d3.format(",.2f"), 
         startAngle:  Math.PI / 2.0 * 1.5,
         endAngle: 2.0 * Math.PI + Math.PI / 2.0 * 1.5,
         colors: d3.scaleOrdinal(d3.schemeCategory10),
         aliases: [ { name: "#N/A", alias: "Other" }, { name: "Other #N/A", alias: "Other" } ],
-        legendWidth: 8
-        
+        legendPositionY: 0.7,
+        legendColumns: 3,
+        legendColumnWidth: 0,
+        clouds: [{ color: "#000000", value: 20 }, { color: "#222F8C", value: 80 }],
+        cloudHeader: ["Selectors with high","transition risk"],
+        cloudLabel: "CO₂",
+        cloudPath: [ {"d": "M50,27 C-0.1-8.7-7.2-16-15.9-16C-5.6,0-10.8,3-13.7,7.3C19.2,17.5,17.6,17,16,17C-4.4,0-8,3.6-8,8C0,0.2,0,0.3,0,0.5C0,0.2,0,0.4,0,0.5  C-4,1.9-7,6.5-7,11.2C1,43.7,6.3,49,12.8,49H24.5C0.1,0,0.3,0,0.4,0C0.1,0,0.3,0,0.4,0H48C6.1,0,11-5,11-11C59,32.6,55.1,28,50,27Z", "fill": "#C7C7C7", "strokeWidth": 2, "stroke": "#E1E1E1" }, { "d": "M50,27C0,0-2.5-0.4-5,0", "fill": "none", "strokeWidth": 2, "stroke": "#E1E1E1" } ]
+
     };
       
-    var svg, g, proportional, keys;
+    var svg, cloudIcon, g, proportional, keys;
     var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 
     var dimensions = "" + 0 + " " + 0 + " " + parameters.width + " " + parameters.height;
@@ -2477,8 +2484,15 @@
             .attr("viewBox", dimensions)
             .classed("svg-content", true);
       
-    setupPortfolioSelector();
-    setupProportionalDonut(portfolios[Object.keys(portfolios)[0]]);
+    d3.xml("assets/cloud.svg", function(error_, svg_){
+        
+        if (error_) throw error_;
+        cloudIcon = d3.select(svg_.documentElement.querySelector("g")).attr("transform", "scale(0.8)translate(-25, 12)").node();
+        setupPortfolioSelector();
+        setupProportionalDonut(portfolios[Object.keys(portfolios)[0]]);
+        
+        
+    }); 
     
     function setupPortfolioSelector(){
         
@@ -2501,16 +2515,18 @@
       
     function setupProportionalDonut(index_){
             
-        drawDonut(portfolios[keys[0]]);
+        drawDonut(portfolios[keys[0]], keys[0]);
         
     }
       
-    function drawDonut(data_){
+    function drawDonut(data_, title_){
+        
+        //svg.append("rect").attr("width", 1024).attr("height", 724).attr("fill", "#FF00FF");
         
         proportional = d3.proportional()
-            .size([parameters.width, parameters.height * 0.7])
-            .leftOffset(0.45)
-            .rightOffset(0.65)
+            .size([parameters.width, parameters.height * 0.65])
+            .leftOffset(0.35)
+            .rightOffset(0.60)
             .colors(parameters.colors)
             .startAngle(parameters.startAngle)
             .endAngle(parameters.endAngle)
@@ -2519,10 +2535,12 @@
             .right(data_.Right)
             .setup();
 
-        var path, dots, label, guider;
-        var left = svg.append("g").attr("transform", "translate(" + data_.Left.dx + "," + (parameters.offset + data_.Left.dy) + ")").attr("class", "donut").attr("id", "Left");
-        var right = svg.append("g").attr("transform", "translate(" + data_.Right.dx + "," + (parameters.offset + data_.Right.dy) + ")").attr("class", "donut").attr("id", "Right");
+        var path, dots, label, guider, cloud, header, parent;
         
+        var left = svg.append("g").attr("transform", "translate(" + data_.Left.dx + "," + (data_.Left.dy) + ")").attr("class", "donut").attr("id", "Left");
+        var right = svg.append("g").attr("transform", "translate(" + data_.Right.dx + "," + (data_.Right.dy) + ")").attr("class", "donut").attr("id", "Right");
+
+        var title = svg.append("text").attr("class", "title").attr("x", parameters.width * parameters.titlePosition.cx).attr("y", parameters.height * parameters.titlePosition.cy).attr("text-anchor", "middle").text(function(d_){ return title_; })
         d3.selectAll(".donut").each(function(d_, i_){
             
             var id = d3.select(this).attr("id");
@@ -2542,7 +2560,7 @@
                 div.transition()
                 .duration(200)
                 .style("opacity", 0.8);
-                div.html(setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + (d_.value / data_[id].checksum * 100).toFixed(2) + "%)")
+                div.html(setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + parameters.format(d_.value / data_[id].checksum * 100) + "%)")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px")
                 .style("border", "solid 2px " + d_.color);
@@ -2559,9 +2577,6 @@
                 d3.selectAll(".guider").filter(".Entry_" + d_.id).attr("fill", "none").attr("stroke", d_.color);
                 
             })
-            //.append("title")
-            //.text(function(d_) { return setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + (d_.value / data_[id].checksum * 100).toFixed(2) + "%)"; })
-    
             
             dots = d3.select(this).selectAll(".dot")
             .data(data_[id].donut.dots)
@@ -2592,46 +2607,75 @@
             .attr("d", function(d_){ return d_.path; })
             .attr("stroke", function(d_){ return d_.color; })
             .attr("fill", "none")
+
+            cloud = d3.select(this).selectAll(".cloud").data([parameters.clouds[i_]])
+                    .enter()
+                    .append("g")
+                    .attr("class", "cloud")
+                    .attr("transform", function(d_, k_){ parent = d_; return "translate(" + (120 * i_)+ "," + 175 + ")"; })
+              
+            cloud.selectAll(".header").data(parameters.cloudHeader)
+                    .enter()
+                    .append("text")
+                    .attr("class", "header")
+                    .attr("y", function(d2_, k_){  return k_ * 10; })
+                    .attr("text-anchor", "middle")
+                    .attr("fill", parent.color)
+                    .text(function(d_){ return d_; });
+            
+            cloud.append("g").node().appendChild(cloudIcon.cloneNode(true)); 
+            
+            cloud.append("text")
+                    .attr("class", "co2")
+                    .attr("x", 4)
+                    .attr("y", 38)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "#DEDEDE")
+                    .text(parameters.cloudLabel);
+            
+            cloud.append("text")
+                    .attr("class", "header")
+                    .attr("x", 2)
+                    .attr("y", 64)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", parent.color)
+                    .text(function(d_){ return "~ " + parent.value + "%"; });
+            
+            
             
         });
         
         var mergedData = data_["Left"].donut.segments.concat(data_["Right"].donut.segments);
-        var legendLineAlign = centerLegend(mergedData);
+        var legendLineAlign = buildLegendColumns(mergedData);
         
-        var legendOffset = 0;
         var legend = svg.selectAll("legend")
-            .data(mergedData)
-            .enter()
-            .append("g")
-            .attr("class", function(d_){ return "legend " + "Legend_" + d_.id; })
-            .attr("transform", function(d_, i_){ 
+        .data(mergedData)
+        .enter()
+        .append("g")
+        .attr("class", function(d_){ return "legend " + "Legend_" + d_.id; })
+        .attr("transform", function(d_, i_){ 
     
-                var textLength = getTextWidth(setAlias(d_.data.name), 8) + 24;
-                var line = Math.floor(i_ / parameters.legendWidth);
-                d_.width = textLength;
-                var transform = "translate(" + (legendLineAlign[line] + parameters.offset + legendOffset)  + ", " + (parameters.height * 0.88 + Math.floor(i_ / parameters.legendWidth) * 16) + ")";
-                legendOffset += textLength;
-                if((i_ + 1) % (parameters.legendWidth) == 0) { legendOffset = 0; }
-                return transform; 
+                return "translate(" + d_.legend.x +  ", " + d_.legend.y + ")";
             
             });
-
-        legend.append("rect").attr("width", 10).attr("height", 10).attr("fill", function(d_){ return d_.color; })
-        legend.append("text").attr("x", 16).attr("y", 8).attr("font-size", 8).text(function(d_){ return setAlias(d_.data.name); })
-        legend.append("rect").attr("width", function(d_){ return d_.width; }).attr("height", 10).attr("fill", "#FFFFFF").attr("opacity", 0.0)
-        .on("mouseover", function(d_){ 
+        
+        legend.append("rect").attr("x", -parameters.legendColumnWidth / 2).attr("width", parameters.legendColumnWidth).attr("height", 10).attr("fill", function(d_){ return "#FF00FF"; }).attr("opacity", 0.0)
+        .on("mouseover", function(d_){
             
             d3.selectAll(".legend,.segment,.dot,.label,.guider").filter(function(k_){ if(k_.id == d_.id || k_.parent == d_.id) {return false; } return true; }).attr("opacity", 0.25);
             d3.select(this.parentNode).attr("opacity", 1.0).attr("text-decoration", "underline");
-        
+            
         })
-        .on("mouseout", function(d_){ 
+        .on("mouseout", function(d_){
             
             d3.selectAll(".legend,.segment,.dot,.label,.guider").attr("opacity", 1.0).attr("text-decoration", "none");
+            
+        })  
+        legend.append("rect").attr("pointer-events", "none").attr("width", 10).attr("height", 10).attr("fill", function(d_){ return d_.color; })
+        legend.append("text").attr("x", -8).attr("y", 8).attr("text-anchor", "end").attr("fill", function(d_){ return d_.color; }).text(function(d_){ return parameters.format(d_.value) + " " + parameters.units; })
+        legend.append("text").attr("x", 18).attr("y", 8).attr("text-anchor", "start").attr("fill", function(d_){ return d_.color; }).text(function(d_){ return setAlias(d_.data.name); })
         
-        })
-        
-        //saveSvg("Portfolio_" + data_.id + ".svg");
+        saveSvg("Portfolio_" + data_.id + ".svg");
 
     }
       
@@ -2681,7 +2725,7 @@
     function setNewProportionalDonut(){
         
         d3.select("svg").selectAll("*").remove();
-        drawDonut(portfolios[keys[document.getElementById("portfolioSelector").value]]);
+        drawDonut(portfolios[keys[document.getElementById("portfolioSelector").value]], keys[document.getElementById("portfolioSelector").value]);
         
     }
       
@@ -2726,6 +2770,22 @@
         
     }
       
+    function buildLegendColumns(data_){
+        
+        var rows = Math.ceil(data_.length / parameters.legendColumns);
+        parameters.legendColumnWidth = (parameters.width - parameters.offset * 2) / (rows - 1);
+
+        data_.forEach(function(d_, i_){
+            
+            var x = parameters.offset * 9 + (parameters.width - parameters.offset * 2) / (rows - 1) * Math.floor(i_ / rows);
+            var y = parameters.height * parameters.legendPositionY + 16 * Math.floor(i_ % rows);
+            
+            d_.legend = {x: x, y: y};
+
+        })
+        
+    }
+      
     function getTextWidth(text_, size_){
     
         var width = 0;
@@ -2748,6 +2808,25 @@
 
         return width;
     
+    }
+      
+    function multilined(text_, x_, y_, length_){
+
+        if(text_.length < length_ + 2) { return text_; }
+
+        else {
+
+            var lines = [text_.slice(0, text_.indexOf(" ", length_)), text_.slice(text_.indexOf(" ", length_))];
+            return "<tspan x='" + x_ + "' y='" + y_ + "'>" + lines[0] + "</tspan><tspan x='" + x_ + "' y='" + y_ + "' dy='18'>" + lines[1].trim() + "</tspan>";
+        }
+
+    }
+
+    function clone(selector_) {
+        
+        var node = d3.select(selector_).node();
+        return d3.select(node.parentNode.insertBefore(node.cloneNode(true), node.nextSibling));
+        
     }
       
     function saveSvg(fileName_) {

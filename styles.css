@@ -2,6 +2,20 @@
 
 body{ margin: 0; font-family: "Open Sans", sans-serif; font-size: 12px; } 
 
+.title { 
+    
+    font-size: 14px; 
+    pointer-events: none;
+     -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+}
+
+
 .label { 
     
     font-size: 11px; 
@@ -16,6 +30,19 @@ body{ margin: 0; font-family: "Open Sans", sans-serif; font-size: 12px; }
 }
 
 .legend text { 
+    
+    font-size: 8px; 
+    pointer-events: none;
+     -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+}
+
+.header { 
     
     font-size: 8px; 
     pointer-events: none;

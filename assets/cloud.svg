@@ -1,0 +1,15 @@
+<svg version="1.1" baseProfile="tiny"
+	 id="cloudIcon" inkscape:version="0.92.3 (2405546, 2018-03-11)" sodipodi:docname="cloud.svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60 60"
+	 xml:space="preserve">
+<sodipodi:namedview  bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview39" inkscape:current-layer="Capa_1" inkscape:cx="23.612206" inkscape:cy="36.802099" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="2066" inkscape:window-maximized="1" inkscape:window-width="3840" inkscape:window-x="-11" inkscape:window-y="-11" inkscape:zoom="15.733333" objecttolerance="10" pagecolor="#ffffff" showgrid="false">
+	</sodipodi:namedview>
+<g id="cloudIcon">
+<path id="path2" fill="#C7C7C7" stroke="#E1E1E1" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M50,27
+	c-0.1-8.7-7.2-16-15.9-16c-5.6,0-10.8,3-13.7,7.3C19.2,17.5,17.6,17,16,17c-4.4,0-8,3.6-8,8c0,0.2,0,0.3,0,0.5c0,0.2,0,0.4,0,0.5
+	c-4,1.9-7,6.5-7,11.2C1,43.7,6.3,49,12.8,49h24.5c0.1,0,0.3,0,0.4,0c0.1,0,0.3,0,0.4,0H48c6.1,0,11-5,11-11C59,32.6,55.1,28,50,27z"
+	/>
+<path id="path4" fill="#7FABDA" stroke="#E1E1E1" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M50,27
+	c0,0-2.5-0.4-5,0"/>
+    </g>
+</svg>
