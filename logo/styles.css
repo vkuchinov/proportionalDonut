@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,900&display=swap");
+
+body{ margin: 0; font-family: "Raleway", sans-serif; } 
+
+#logo {
+    
+    position: absolute;
+    width: 634px;
+    height: 305px;
+    
+}
+.type {
+    
+    fill: #595959;
+    font-weight: 900;
+    font-size: 72px;  
+    
+}
+
+.moto {
+    
+    fill: #A6A6A6;
+    font-weight: 300;
+    font-size: 36px;  
+    
+}

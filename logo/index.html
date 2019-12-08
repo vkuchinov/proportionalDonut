@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      
+    <meta charset="utf-8">
+    <title>Proporitonal Donut Chart Logo</title>
+    <script src="http://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="styles.css" charset="utf-8">
+  
+  </head>
+  <body>
+      
+  <div id="logo"></div>
+      
+  <script>
+  
+  //https://jsfiddle.net/mhayne1/2pbyL97w/
+
+  var width = 634, height = 305, svg, type = ["Capital","Transition","Monitor"], moto = "Measuring, Managing, Shaping Capital";
+  var dot = { cx: 312, cy: 218, r: 6, color: "#FF5353", ripples: [ {id:0, t: 1800, d:0 }, {id:1, t: 1800, d:300 }, { id:0, t:1800, d:600 }] };
+  var ease = d3.easeCubic;
+      
+  var dimensions = "" + 0 + " " + 0 + " " + width + " " + height;
+      
+  var svg = d3.select("#logo").append("svg")
+            .attr("id", "svg", true)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", dimensions)
+            .classed("svg-content", true);
+      
+  svg.selectAll(".type")
+      .data(type)
+      .enter()
+      .append("text")
+      .attr("class", "type")
+      .attr("x", 32)
+      .attr("y", function(d_, i_){ return 80 + 72 * i_; })
+      .text(function(d_){ return d_; })
+      
+   svg.append("text")
+      .attr("class", "moto")
+      .attr("x", 32)
+      .attr("y", 276)
+      .attr("letter-spacing", "-2px")
+      .text(moto)
+  
+  svg.selectAll(".ripple")
+      .data(dot.ripples)
+      .enter()
+      .append("circle")
+      .attr("id", function(d_){ return "rippple_" + d_.id; })
+      .attr("class", "ripple")
+      .attr("cx", dot.cx)
+      .attr("cy", dot.cy)
+      .attr("r", dot.r)
+      .attr("fill", dot.color)
+      .attr("opacity", 1.0)
+      .transition()
+      .duration(function(d_){ return d_.t; })
+      .delay(function(d_){ return d_.d; })
+      .ease(ease)
+      .attr("r", dot.r * 2.0)
+      .attr("opacity", 0.0)
+      .on("end", repeat)
+      
+  svg.append("circle")
+     .attr("cx", dot.cx)
+     .attr("cy", dot.cy)
+     .attr("r", dot.r)
+     .attr("fill", dot.color)
+      
+  function repeat(){
+
+      d3.selectAll(".ripple")
+          .attr("r", dot.r)
+          .attr("opacity", 1.0)
+          .transition()
+          .duration(function(d_){ return d_.t; })
+          .delay(function(d_){ return d_.d; })
+          .ease(ease)
+          .attr("r", dot.r * 2.0)
+          .attr("opacity", 0.0)
+          .on("end", repeat)
+     
+  }
+      
+  </script>
+      
+  </body>
+</html>
