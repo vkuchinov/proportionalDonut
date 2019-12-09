@@ -41,6 +41,14 @@ d3.proportional = function(){
 
     };
     
+    proportional.rightLabelXOffset = function (_) {
+
+        if (!arguments.length) return rightLabelXOffset;
+        rightLabelXOffset = _;
+        return proportional;
+
+    };
+    
     proportional.colorsLeft = function (_) {
 
         if (!arguments.length) return colorsLeft;
@@ -368,7 +376,7 @@ d3.proportional = function(){
             var median = d_.startAngle + (d_.endAngle - d_.startAngle) / 2.0;
 
             dx = outerRadius * labelOffset * 1.2;
-            dy = -(fontSize* left.segments.length - 2) / 3.0 + trbl.tr * 16;
+            dy = -20 -(fontSize * left.segments.length - 2) / 3.0 + trbl.tr * 16;
             trbl.tr++;
 
             var x0 = outerRadius * Math.cos(-Math.PI/ 2.0 + median);
