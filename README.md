@@ -4,7 +4,9 @@ based on D3.JS framework
 
 ![alt tag](https://raw.githubusercontent.com/vkuchinov/proportionalDonut/master/assets/sample.png)
 
-
+<br>
+If you want dynamic size for right part, please set <i>.fixed(false)</i> at line #96 
+<br>
 <h2>TODO LIST</H2>
 
 [x] Parse CSV data set to JSON format<br>
