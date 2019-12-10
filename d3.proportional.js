@@ -13,9 +13,11 @@ d3.proportional = function(){
     proportional = {},
     size = [768, 384],
     sum = 0,
+    fixed = true,
     leftOffset = 0.33,
     rightOffset = 0.60,
     rightLabelXOffset = 12.0,
+    rightManualOffsetY = -40,
     labelOffset = 1.15,
     padding = 0,
     fontSize = 12,
@@ -45,6 +47,22 @@ d3.proportional = function(){
 
         if (!arguments.length) return rightLabelXOffset;
         rightLabelXOffset = _;
+        return proportional;
+
+    };
+    
+    proportional.rightManualOffsetY = function (_) {
+
+        if (!arguments.length) return rightManualOffsetY;
+        rightManualOffsetY = _;
+        return proportional;
+
+    };
+    
+    proportional.fixed = function (_) {
+
+        if (!arguments.length) return fixed;
+        fixed = _;
         return proportional;
 
     };
@@ -162,6 +180,7 @@ d3.proportional = function(){
     proportional.setup = function(){
         
         setupPlaceholders();
+        if(!fixed) { setupDynamicStartingAngle(); }
         
         left.dy = right.dy = size[1] / 2.0;
         
@@ -176,13 +195,25 @@ d3.proportional = function(){
         
         left.checksum = left.segments.reduce(getSum, 0);
         right.checksum = right.segments.reduce(getSum, 0);
-        sum = left.checksum + right.checksum;
+
+        sum = parameters.total + left.checksum + right.checksum;
         
         var leftPlaceholder = (sum - right.checksum) / 3.0;
         var rightPlaceholder = right.checksum * 3.0;
         
-        left.segments.push({name: "leftPlaceholder", value: leftPlaceholder });
-        right.segments.unshift({name: "rightPlaceholder", value: rightPlaceholder });
+        if(fixed){
+            
+            left.segments.push({name: "leftPlaceholder", value: leftPlaceholder });
+            right.segments.unshift({name: "rightPlaceholder", value: rightPlaceholder });
+            
+        }
+        else{
+            
+            left.segments.push({name: "leftPlaceholder", value: right.checksum });
+            right.segments.unshift({name: "rightPlaceholder", value: left.checksum });
+            
+        }
+
         
     }
     
@@ -353,7 +384,7 @@ d3.proportional = function(){
                 }
 
         });
-
+        
     }
     
     setupRightPart = function() {
@@ -376,7 +407,7 @@ d3.proportional = function(){
             var median = d_.startAngle + (d_.endAngle - d_.startAngle) / 2.0;
 
             dx = outerRadius * labelOffset * 1.2;
-            dy = -20 -(fontSize * left.segments.length - 2) / 3.0 + trbl.tr * 16;
+            dy = rightManualOffsetY -(fontSize * left.segments.length - 2) / 3.0 + trbl.tr * 16;
             trbl.tr++;
 
             var x0 = outerRadius * Math.cos(-Math.PI/ 2.0 + median);
@@ -430,9 +461,29 @@ d3.proportional = function(){
         
 
         });
+        
+        var phi;
   
     }
     
+    setupDynamicStartingAngle = function(){
+        
+        var tmppie = d3.pie().value(function(d_) { return d_.value; }).sort(null);
+        var rightCopy = JSON.parse(JSON.stringify(right));
+        rightCopy.donut = { dots: [] };
+        rightCopy.arc = arc;
+        rightCopy.donut.segments = tmppie(rightCopy.segments);
+        
+        console.log(rightCopy.donut.segments[1]);
+        console.log(rightCopy.donut.segments[rightCopy.donut.segments.length - 1].endAngle);
+        
+        var phi = (rightCopy.donut.segments[rightCopy.donut.segments.length - 1].endAngle - rightCopy.donut.segments[1].startAngle) / 2.0;
+        
+        pie.startAngle( Math.PI /2 * 1.5 - 0.3).endAngle(Math.PI * 2 + Math.PI /2 * 1.5 - 0.3);
+
+    }
+    
+    getFixed = function() { return fixed; }
     setMedians = function(segments_){
         
         left.trbl = {tr: 0, br: 0, bl: 0, tl: 0 };
