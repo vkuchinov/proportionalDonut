@@ -15,9 +15,11 @@ d3.proportional = function(){
     sum = 0,
     fixed = true,
     leftOffset = 0.33,
+    leftRatio = 1.15,
     rightOffset = 0.60,
     rightLabelXOffset = 12.0,
-    rightManualOffsetY = -40,
+    rightManualOffsetY = 0,
+    rightRatio = 2.0,
     labelOffset = 1.15,
     padding = 0,
     fontSize = 12,
@@ -47,6 +49,22 @@ d3.proportional = function(){
 
         if (!arguments.length) return rightLabelXOffset;
         rightLabelXOffset = _;
+        return proportional;
+
+    };
+    
+    proportional.leftRatio = function (_) {
+
+        if (!arguments.length) return leftRatio;
+        leftRatio = _;
+        return proportional;
+
+    };
+    
+    proportional.rightRatio = function (_) {
+
+        if (!arguments.length) return rightRatio;
+        rightRatio = _;
         return proportional;
 
     };
@@ -244,17 +262,16 @@ d3.proportional = function(){
                     
                 //bottom right
                 if(median < Math.PI){
-
-                    dx = outerRadius * labelOffset;
+                    
+                    dx = outerRadius * labelOffset * leftRatio;
                     dy = outerRadius * labelOffset - fontSize * (left.trbl.br - trbl.br - 1);
-                    dx = outerRadius * labelOffset;
                     trbl.br++;
 
                 }
                 //top right
                 else if(median > 2.0 * Math.PI){
 
-                    dx = outerRadius * labelOffset;
+                    dx = outerRadius * labelOffset * leftRatio;
                     dy = -outerRadius * labelOffset + fontSize * trbl.tr;
                     trbl.tr++;
                 
@@ -264,7 +281,7 @@ d3.proportional = function(){
                 else if(median > Math.PI && median < Math.PI * 1.5){ 
 
                     align = "end";
-                    dx = -outerRadius * labelOffset;
+                    dx = -outerRadius * labelOffset * leftRatio;
                     dy = outerRadius * labelOffset - fontSize * trbl.bl;
                     direction = 1;
                     trbl.bl++;
@@ -274,7 +291,7 @@ d3.proportional = function(){
                 else{
 
                     align = "end";
-                    dx = -outerRadius * labelOffset;
+                    dx = -outerRadius * labelOffset * leftRatio;
                     dy = -outerRadius * labelOffset + fontSize * (left.trbl.tl - trbl.tl - 1);
                     direction = 1;
                     trbl.tl++;
@@ -408,7 +425,7 @@ d3.proportional = function(){
           
             var median = d_.startAngle + (d_.endAngle - d_.startAngle) / 2.0;
 
-            dx = outerRadius * labelOffset * 1.2;
+            dx = outerRadius * labelOffset * 1.5;
             dy = rightManualOffsetY -(fontSize * left.segments.length - 2) / 3.0 + trbl.tr * 16;
             trbl.tr++;
 
@@ -418,7 +435,7 @@ d3.proportional = function(){
             var y1 = dy - dotRadius;
             
             right.donut.segments.length % 2 == 0 ? half = (right.donut.segments.length) / 2.0 : half = (right.donut.segments.length - 1) / 2.0;
-            var xOffset = Math.abs(half - i_)
+            var xOffset = Math.abs(half - i_) * rightRatio;
             
             path = "M" + (outerRadius * Math.cos(-Math.PI / 2.0 + median)) + " " + y0 + " L" + (x0 + rightLabelXOffset * xOffset) + " " + y0 + " L" + x1 + " " + y1
             

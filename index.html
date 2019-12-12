@@ -226,6 +226,12 @@
         portfolio_data.forEach(function(d_){
             
             d_ = JSON.parse(JSON.stringify(d_).replace(/\:null/gi, "\:\"#N/A\"")); 
+            if(d_.ChartSegment == "Right" && d_[d_.ChartSegment + "Sector"] == "Other") { 
+                
+                if(d_.LeftSector != "#N/A" && d_.LeftSector != "Other") { d_.LeftSector = "Other " + d_.LeftSector; } else { d_.LeftSector = "#N/A"; }
+                d_.ChartSegment = "Left"; 
+            
+            }
             
             if(!portfolioExists(d_["Portfolio.Name"])){
                 
@@ -235,6 +241,9 @@
                 portfolio.Left = { name: d_["Portfolio.Name"] + "_Left" , segments: [] };
                 portfolio.Right = { name: d_["Portfolio.Name"] + "_Right", segments: [] };
 
+                console.log(d_);
+                if(d_[d_.ChartSegment] == "Other") {; d_.ChartSegment = "Left"; }
+                
                 portfolio[d_.ChartSegment].segments.push({ name: splitOthers(d_, d_[d_.ChartSegment + "Sector"]), value: Number(d_["Value." + parameters.units]) });
                 
                 var option = document.createElement("option");
@@ -259,8 +268,7 @@
             }
 
         });
-        
-        console.log(portfolios);
+
         keys = Object.keys(portfolios);
         setNewProportionalDonut();
         
@@ -279,7 +287,7 @@
                 portfolio.id = Object.keys(portfolios).length - 1;
                 portfolio.Left = { name: d_.Name + "_Left" , theta: parameters.leftThera, segments: [] };
                 portfolio.Right = { name: d_.Name + "_Right", theta: parameters.rightTheta, segments: [] };
-                
+
                 portfolio[d_.Side].segments.push({ name: splitOthers(d_, d_[d_.Side]), value: Number(d_["Value_" + parameters.units]) });
                 
                 var option = document.createElement("option");
@@ -327,10 +335,10 @@
         
         var out = segment_;
 
-        if(parent_.ChartSegment != "Left" && segment_ == "Other") { 
+        if(segment_ == "Other") { 
 
             out = segment_ + " " + parent_.LeftSector;
-        
+
         }
         
         return out;
