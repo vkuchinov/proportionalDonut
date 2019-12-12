@@ -315,6 +315,7 @@ d3.proportional = function(){
                     
                     parent: d_.id,
                     name: d_.data.name,
+                    value: d_.data.value,
                     align: align,
                     dx: dx,
                     dy: dy,
@@ -366,6 +367,7 @@ d3.proportional = function(){
 
                         parent: null,
                         name: d_.data.name.split(" ").length > 1 ? makeAbbreviation(d_.data.name) : d_.data.name,
+                        value: d_.data.value,
                         align: align,
                         dx: dx,
                         dy: dy,
@@ -444,6 +446,7 @@ d3.proportional = function(){
                     
                     parent: d_.id,
                     name: d_.data.name,
+                    value: d_.data.value,
                     align: align,
                     dx: dx,
                     dy: dy,

@@ -18,7 +18,7 @@
   <select id="portfolioSelector" class="custom-select" name="Portfolios" onchange="setNewProportionalDonut()"></select>
       
   <script>
-      
+
     var portfolios = { };
       
     var parameters = {
@@ -28,8 +28,8 @@
         offset: 32,
         units: "USD",
         total: 0,
-        titlePosition: {cx: 0.5, cy: 0.33 },
-        format: d3.format(",.2f"), 
+        titlePosition: {cx: 0.5, cy: 0.5 },
+        format: d3.format("0.2s"), 
         format2: d3.format(".2n"), //sagnificant figures
         startAngle:  Math.PI / 2.0 * 1.5,
         endAngle: 2.0 * Math.PI + Math.PI / 2.0 * 1.5,
@@ -91,7 +91,7 @@
         //svg.append("rect").attr("width", 1024).attr("height", 724).attr("fill", "#FF00FF");
         
         proportional = d3.proportional()
-            .size([parameters.width, parameters.height * 0.65])
+            .size([parameters.width, parameters.height])
             .rightLabelXOffset(6.0)
             .fixed(true)
             .leftOffset(0.35)
@@ -130,7 +130,7 @@
                 div.transition()
                 .duration(200)
                 .style("opacity", 0.8);
-                div.html(setAlias(d_.data.name) + ": " + parameters.format(d_.value) + " " + parameters.units + " (" + parameters.format2(d_.value / total * 100) + "%)")
+                div.html(setAlias(d_.data.name) + ": " + formatValue(parameters.format(d_.value)) + " " + parameters.units + " (" + parameters.format2(d_.value / total * 100) + "%)")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px")
                 .style("border", "solid 2px " + d_.color);
@@ -167,7 +167,7 @@
             .attr("y", function(d_){ return d_.dy; })
             .attr("text-anchor", function(d_){ return d_.align; })
             .attr("fill", function(d_){ return d_.color; })
-            .text(function(d_){ return setAlias(d_.name); });  
+            .text(function(d_){ return setAlias(d_.name) + " " + parameters.format2(d_.value / total * 100) + "%"; });  
             
             guider = d3.select(this).selectAll(".guider")
             .data(data_[id].donut.guiders)
@@ -214,37 +214,7 @@
             
             
         });
-        
-        var mergedData = data_["Left"].donut.segments.concat(data_["Right"].donut.segments);
-        var legendLineAlign = buildLegendColumns(mergedData);
-        
-        var legend = svg.selectAll("legend")
-        .data(mergedData)
-        .enter()
-        .append("g")
-        .attr("class", function(d_){ return "legend " + "Legend_" + d_.id; })
-        .attr("transform", function(d_, i_){ 
-    
-                return "translate(" + d_.legend.x +  ", " + d_.legend.y + ")";
-            
-            });
-        
-        legend.append("rect").attr("x", -parameters.legendColumnWidth / 2).attr("width", parameters.legendColumnWidth).attr("height", 10).attr("fill", function(d_){ return "#FF00FF"; }).attr("opacity", 0.0)
-        .on("mouseover", function(d_){
-            
-            d3.selectAll(".legend,.segment,.dot,.label,.guider").filter(function(k_){ if(k_.id == d_.id || k_.parent == d_.id) {return false; } return true; }).attr("opacity", 0.25);
-            d3.select(this.parentNode).attr("opacity", 1.0).attr("text-decoration", "underline");
-            
-        })
-        .on("mouseout", function(d_){
-            
-            d3.selectAll(".legend,.segment,.dot,.label,.guider").attr("opacity", 1.0).attr("text-decoration", "none");
-            
-        })  
-        legend.append("rect").attr("pointer-events", "none").attr("width", 10).attr("height", 10).attr("fill", function(d_){ return d_.color; })
-        legend.append("text").attr("x", -8).attr("y", 8).attr("text-anchor", "end").attr("fill", function(d_){ return d_.color; }).text(function(d_){ return parameters.format(d_.value) + " " + parameters.units; })
-        legend.append("text").attr("x", 18).attr("y", 8).attr("text-anchor", "start").attr("fill", function(d_){ return d_.color; }).text(function(d_){ return setAlias(d_.data.name); })
-        
+
         //saveSvg("Portfolio_" + data_.id + ".svg");
 
     }
@@ -337,6 +307,12 @@
         
         setupProportionalDonut(portfolios[Object.keys(portfolios)[0]]);
 
+    }
+      
+    function formatValue(v_){
+        
+        return v_.replace(/M/," million").replace(/G/," billion").replace(/T/," trillion");
+        
     }
       
     function setNewProportionalDonut(){
