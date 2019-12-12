@@ -36,7 +36,7 @@ UPDATED [10.12.2019]
     should always be at the same horizontal line.
     <br><br><i>With fixed set to false, both arcs have aligned in the way that median horizontal line always goes through
     donut centers, like this</i>:
-    <br>![alt tag](https://raw.githubusercontent.com/vkuchinov/proportionalDonut/master/assets/sample2.png)
+    <br><br>![alt tag](https://raw.githubusercontent.com/vkuchinov/proportionalDonut/master/assets/sample2.png)
     
 [x] Adding the percentage to the labels
     
