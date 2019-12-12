@@ -39,5 +39,12 @@ UPDATED [10.12.2019]
     <br><br>![alt tag](https://raw.githubusercontent.com/vkuchinov/proportionalDonut/master/assets/sample2.png)
     
 [x] Adding the percentage to the labels
+
+[x] Adding "billion" to the units text
+
+[x] Removing legend
+
+[!] Set height to 800px
+    It's a vector graphics, so there's no pixels, the only thing I have to know is width/height ratio.
     
 <br>[-] planned, [x] done, [!] see comments<br>
